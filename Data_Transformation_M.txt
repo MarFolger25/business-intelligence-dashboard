@@ -1,0 +1,18 @@
+// Power Query (M) Script for Data Cleaning
+let
+    Source = Csv.Document(File.Contents("C:\Data\raw_bookings.csv"),[Delimiter=",", Columns=8, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+    PromoteHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+    
+    // Cleaning customer emails (standardizing to lowercase)
+    CleanEmail = Table.TransformColumns(PromoteHeaders, {{"customer_email", Text.Lower, type text}}),
+    
+    // Handling null values in Add-on column
+    ReplaceNullAddons = Table.ReplaceValue(CleanEmail, null, "No", Replacer.ReplaceValue,{"has_addon"}),
+    
+    // Formatting Dates for Finnish Locale
+    SetDateType = Table.TransformColumnTypes(ReplaceNullAddons,{{"booking_date", type date}}, "fi-FI"),
+    
+    // Adding a conditional column for Service Urgency
+    AddUrgency = Table.AddColumn(SetDateType, "Urgency", each if [service_type] = "On-site" then "High" else "Standard")
+in
+    AddUrgency
