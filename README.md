@@ -25,3 +25,4 @@ In a high-growth environment, tracking static numbers is not enough. This logic 
 * `Revenue MoM Growth %`: Dynamic performance comparison.
 * `Avg Turnaround Days`: Core operational KPI.
 * `Is High Value Client`: Advanced statistical classification.
+![Workshop Dashboard Preview](dashboard-preview.png)
